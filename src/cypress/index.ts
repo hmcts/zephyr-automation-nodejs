@@ -1,2 +1,2 @@
 export { ZephyrReporter } from './ZephyrReporter';
-export * from './zephyr-reports';
+export * from './zephyr-automation';

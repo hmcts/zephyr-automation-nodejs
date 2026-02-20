@@ -1,37 +1,78 @@
-# Zephyr Automation Node.js Library
+# @hmcts/zephyr-automation-nodejs
 
 Node.js library for Zephyr automation in HMCTS projects.
 
+## Overview
+
+This package provides utilities and a custom Mocha reporter to generate, merge, and manage Zephyr-compatible JSON test reports for use in HMCTS projects. It is designed to be used with Cypress and Mocha test suites.
+
+## Features
+- **ZephyrReporter**: Custom Mocha reporter that outputs Zephyr-compatible JSON reports.
+- **Report merging**: Utilities to merge multiple Zephyr JSON reports, with deduplication and thread-awareness.
+- **Report cleaning**: Utility to clean up Zephyr report directories.
+
 ## Installation
 
-```sh
+```
 yarn add @hmcts/zephyr-automation-nodejs
+# or
+npm install @hmcts/zephyr-automation-nodejs
 ```
 
 ## Usage
 
-Import the Zephyr reporter or merge utility in your Node.js project:
+### ZephyrReporter (Mocha)
+
+Add the reporter to your Mocha configuration or CLI:
+
+```
+mocha --reporter @hmcts/zephyr-automation-nodejs/dist/cypress/ZephyrReporter.js
+```
+
+Or in your Cypress plugins (if using programmatically):
 
 ```js
-import { ZephyrReporter, zephyrReports } from '@hmcts/zephyr-automation-nodejs/cypress';
+const { ZephyrReporter } = require('@hmcts/zephyr-automation-nodejs/dist/cypress/ZephyrReporter');
 ```
 
-- `ZephyrReporter`: Custom Mocha reporter for Zephyr-compatible JSON output.
-- `zephyrReports`: Utility to merge multiple Zephyr JSON reports.
+### Report Utilities
 
-## Build
+Import and use the utilities in your scripts:
 
-```sh
-yarn build
+```ts
+import { mergeZephyrReports, cleanZephyrReports } from '@hmcts/zephyr-automation-nodejs';
+
+mergeZephyrReports({ rootDir: '<Your output directory>', dedupe: true });
+cleanZephyrReports({ rootDir: '<Your output directory>' });
 ```
 
-## Lint
+#### Options
+- `rootDir`: Root directory containing Zephyr reports (e.g. `<Your output directory>`).
+- `dedupe`: (optional) Deduplicate tests when merging reports.
+- `allowMergeOnAllThreads`: (optional) Allow merging on any thread (default: only on thread 1).
 
-```sh
-yarn lint
-```
+## API
+
+### ZephyrReporter
+A Mocha reporter that outputs Zephyr-compatible JSON reports. Output files are written to `<Your output directory>/zephyr/temp/` by default.
+
+### mergeZephyrReports(options)
+Merges all Zephyr JSON reports in the specified directory into a single report.
+
+### cleanZephyrReports(options)
+Removes all Zephyr report files from the specified directory.
+
+## Development
+
+- Build: `yarn build`
+- Lint: `yarn lint`
+- Test: (add your test instructions here)
 
 ## License
 
-MIT
+MIT License. See [LICENSE](./LICENSE) for details.
+
+## Contributing
+
+Contributions are welcome! Please open issues or pull requests on [GitHub](https://github.com/hmcts/zephyr-automation-nodejs).
 
