@@ -1,0 +1,33 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist",
+    "strict": true,
+    "noImplicitOverride": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "lib": ["ES2022", "dom"],
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    "moduleResolution": "node",
+    "typeRoots": ["node_modules/@types"],
+    "paths": {
+      "@hmcts/zephyr-automation-nodejs": [
+        "./src/index.ts",
+      ],
+      "@hmcts/zephyr-automation-nodejs/cypress/*": [
+        "./src/cypress/*"
+      ]
+    }
+  },
+  "include": ["src", "src/index.ts"],
+  "exclude": ["node_modules", "dist", "src/**/*.spec.ts"]
+}
