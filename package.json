@@ -8,14 +8,16 @@
     "type": "git",
     "url": "https://github.com/hmcts/zephyr-automation-nodejs"
   },
-  "main": "dist/index",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "build": " yarn clean && tsc && cp package.json dist/ && cp README.md dist/",
+    "build": "yarn clean && tsc",
     "clean": "rm -rf dist",
     "lint": "eslint ./src --ext .ts && yarn prettier",
     "prettier": "prettier --check \"./src/**/*.{ts,js,json}\"",
     "prettier:fix": "prettier --write \"./src/**/*.{ts,js,json}\"",
+    "pack:local": "yarn build && npm pack",
+    "prepack": "yarn build",
     "audit:save": "yarn audit --recursive --environment production --json > yarn-known-issues || true",
     "audit:check": "yarn audit --recursive --environment production --json > yarn-known-issues-current || true && jq -s '[.[] | select(.type==\"auditAdvisory\") | .data.advisory.id] | sort' yarn-known-issues-current > current-ids.json && jq -s '[.[] | select(.type==\"auditAdvisory\") | .data.advisory.id] | sort' yarn-known-issues > known-ids.json && diff -q known-ids.json current-ids.json || (echo '❌ New vulnerabilities detected. Please review.' && exit 1)"
   },
@@ -28,15 +30,23 @@
     "mocha": "^11.7.5",
     "typescript": "^5.9.3"
   },
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "yarn@4.12.0",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "exports": {
     ".": {
-      "import": "./index.js",
-      "types": "./index.d.ts"
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./cypress": {
-      "import": "./cypress/index.js",
-      "types": "./cypress/index.d.ts"
+      "import": "./dist/cypress/index.js",
+      "require": "./dist/cypress/index.js",
+      "types": "./dist/cypress/index.d.ts",
+      "default": "./dist/cypress/index.js"
     }
-  }
+  } 
 }
