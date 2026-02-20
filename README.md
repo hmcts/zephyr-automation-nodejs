@@ -70,7 +70,7 @@ Removes all Zephyr report files from the specified directory.
 
 ## Updating the zephyr-automation-independent jar
 To update the `zephyr-automation-independent` jar, follow these steps:
-1. Update [pom.xml](scripts/tools/zephyr/pom.xml) with the new version of the tool
+1. Update [pom.xml](scripts/tools/zephyr/pom.xml) with the new version of the tool both in the `dependencies` section and the header version
 2. Run [fetch-jar.sh](scripts/fetch-jar.sh)
 3. Commit the updated jar file in `scripts/tools/zephyr/zephyr-automation-independent.jar` and push to the repository.
 4. Update the version of `@hmcts/zephyr-automation-nodejs` in `package.json` and publish a new version.

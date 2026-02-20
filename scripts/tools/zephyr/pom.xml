@@ -7,7 +7,7 @@
   <!-- This POM is just a local “packaging wrapper”, not the real artifact -->
   <groupId>local</groupId>
   <artifactId>zephyr-automation-fatjar</artifactId>
-  <version>1.0.0</version>
+  <version>0.0.3</version>
   <packaging>jar</packaging>
 
   <properties>
