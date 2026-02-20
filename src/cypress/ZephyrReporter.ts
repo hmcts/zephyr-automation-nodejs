@@ -86,7 +86,7 @@ export class ZephyrReporter extends Base {
 
     const filePath = runner.suite?.file?.toString() || 'zephyr-report-' + generatedAt;
     const outDir = 'functional-output/zephyr/temp/' + path.dirname(filePath);
-    const outFile = 'zephyr-report-' + path.basename(filePath).replace(/\.cy\.ts$/, '.json');
+    const outFile = 'cypress-report-' + path.basename(filePath).replace(/\.cy\.ts$/, '.json');
 
     this.outputPath = path.resolve(outDir, outFile);
 

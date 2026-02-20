@@ -1,8 +1,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync} from "node:child_process";
 
 type TestStatus = 'passed' | 'failed' | 'pending';
 type JsonError = { message: string; stack?: string };
+
+export type ZephyrCliOptions = {
+  processType: string;
+  actionType: string;
+  basePath: string;
+  reportPath: string;
+  githubRepoBaseSrcDir?: string;
+  jiraBaseUrl: string;
+  jiraProjectId: string;
+  jiraDefaultUser: string;
+  jiraAuthToken: string;
+  jiraEpicLinkCustomFieldId: string;
+  jiraDefaultComponents: string;
+  jarLocation: string;
+};
 
 type JsonTest = {
   title: string;
@@ -104,7 +120,7 @@ export function mergeZephyrReports(opts: Options) {
   const baseDir = path.resolve(opts.rootDir) + '/zephyr';
   const root = baseDir + '/temp';
   const thread = process.env['CYPRESS_THREAD'] || '1';
-  const outFile = baseDir + `/zephyr-report-${thread}.json`;
+  const outFile = baseDir + `/cypress-report-${thread}.json`;
   const dedupe = Boolean(opts.dedupe);
   if (!opts.allowMergeOnAllThreads && thread !== '1') {
     console.warn('[merge-zephyr] Warning: CYPRESS_THREAD is not set to \'0\' or \'1\'. Skipping merge as this is redundant.');
@@ -117,12 +133,12 @@ export function mergeZephyrReports(opts: Options) {
 
   const allFiles = walk(root);
   const inputFiles = allFiles
-    .filter((f) => path.basename(f).startsWith('zephyr-report-'))
+    .filter((f) => path.basename(f).startsWith('cypress-report-'))
     .filter((f) => f.toLowerCase().endsWith('.json'))
     .filter((f) => path.resolve(f) !== outFile);
 
   if (inputFiles.length === 0) {
-    console.warn(`[merge-zephyr] No zephyr-report-*.json found under ${root}`);
+    console.warn(`[merge-zephyr] No cypress-report-*.json found under ${root}`);
     return;
   }
 
@@ -179,4 +195,38 @@ export function mergeZephyrReports(opts: Options) {
   console.log(
     `[merge-zephyr] Merged ${reports.length} reports -> ${outFile} (${merged.stats.tests} tests)`
   );
+}
+
+
+function buildArgs(opts: ZephyrCliOptions): string[] {
+  const entries: Record<string, string | undefined> = {
+    "process-type": opts.processType,
+    "action-type": opts.actionType,
+    "base-path": opts.basePath,
+    "report-path": opts.reportPath,
+    "github-repo-base-src-dir": opts.githubRepoBaseSrcDir,
+    "jira-base-url": opts.jiraBaseUrl,
+    "jira-project-id": opts.jiraProjectId,
+    "jira-default-user": opts.jiraDefaultUser,
+    "jira-auth-token": opts.jiraAuthToken,
+    "jira-epic-link-custom-field-id": opts.jiraEpicLinkCustomFieldId,
+    "jira-default-components": opts.jiraDefaultComponents,
+  };
+
+  return Object.entries(entries)
+    .filter(([, value]) => value !== undefined && value !== null && value !== "")
+    .map(([key, value]) => `${key}=${value}`);
+}
+export function runZephyr(opts: ZephyrCliOptions):number {
+  const args = buildArgs(opts);
+
+  const result = spawnSync("java", ["-jar", opts.jarLocation, ...args], {
+    stdio: "inherit", // streams live output
+  });
+
+  if (result.error) {
+    throw result.error;
+  }
+
+  return result.status ?? 1;
 }
