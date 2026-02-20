@@ -51,8 +51,12 @@ package-lock.json
 # System files
 .DS_Store
 Thumbs.db
+
 # Yarn audit working files
 yarn-known-issues-current
 current-ids.json
 known-ids.json
 /.vscode/
+
+# npm pack artifacts
+*.tgz
