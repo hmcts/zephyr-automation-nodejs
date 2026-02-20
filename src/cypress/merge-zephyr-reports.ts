@@ -84,7 +84,7 @@ function dedupeTests(tests: JsonTest[]): JsonTest[] {
 export type Options = {
   rootDir: string;         // e.g. functional-output
   dedupe?: boolean;        // dedupe tests
-  allowMergeOnAllThreads: boolean; // allow merge even if CYPRESS_THREAD is not '0' or '1' (default: false)
+  allowMergeOnAllThreads?: boolean; // allow merge even if CYPRESS_THREAD is not '0' or '1' (default: false)
 };
 
 
