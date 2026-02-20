@@ -27,13 +27,15 @@
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "^25.3.0",
+    "cypress": "^15.0.0",
     "mocha": "^11.7.5",
     "typescript": "^5.9.3"
   },
   "packageManager": "yarn@4.12.0",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "cjs"
   ],
   "exports": {
     ".": {
@@ -47,6 +49,12 @@
       "require": "./dist/cypress/index.js",
       "types": "./dist/cypress/index.d.ts",
       "default": "./dist/cypress/index.js"
+    },
+    "./cypress/ZephyrReporter": {
+      "import": "./dist/cypress/ZephyrReporter.js",
+      "require": "./cjs/ZephyrReporter.cjs",
+      "types": "./dist/cypress/ZephyrReporter.d.ts",
+      "default": "./dist/cypress/ZephyrReporter.js"
     }
-  } 
+  }
 }

@@ -13,11 +13,11 @@ yarn add @hmcts/zephyr-automation-nodejs
 Import the Zephyr reporter or merge utility in your Node.js project:
 
 ```js
-import { ZephyrReporter, mergeZephyrReports } from '@hmcts/zephyr-automation-nodejs/cypress';
+import { ZephyrReporter, zephyrReports } from '@hmcts/zephyr-automation-nodejs/cypress';
 ```
 
 - `ZephyrReporter`: Custom Mocha reporter for Zephyr-compatible JSON output.
-- `mergeZephyrReports`: Utility to merge multiple Zephyr JSON reports.
+- `zephyrReports`: Utility to merge multiple Zephyr JSON reports.
 
 ## Build
 

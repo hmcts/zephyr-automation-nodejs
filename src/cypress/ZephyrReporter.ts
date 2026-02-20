@@ -154,3 +154,5 @@ export class ZephyrReporter extends Base {
     });
   }
 }
+
+export default ZephyrReporter;
