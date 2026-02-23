@@ -14,20 +14,22 @@ jobs:
       - name: Validate and extract release information
         id: release
         uses: manovotny/github-releases-for-automated-package-publishing-action@v2.0.1
-
-      - name: Set node version and build
-        uses: actions/setup-node@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
         with:
-          always-auth: true
           node-version: '24.x'
-          registry-url: 'https://registry.npmjs.org'
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack prepare yarn@4.12.0 --activate
       - name: Enable Corepack
         run: |
           corepack enable
           corepack prepare yarn@4.12.0 --activate
       - run: yarn install --frozen-lockfile
-      - run: yarn build
 
+      - name: Build library
+        run: yarn build
       - name: Publish version
         run: yarn publish --new-version ${{ steps.release.outputs.version }} --access public
         env:
