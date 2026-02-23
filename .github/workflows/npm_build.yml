@@ -4,12 +4,13 @@ on:
     types: [created]
 jobs:
   release:
+    name: Release and Publish
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
     steps:
-      - name: Checkout repo
+      - name: Checkout repository (Release)
         uses: actions/checkout@v6
         with:
           ref: ${{ github.event.release.target_commitish }}
@@ -17,21 +18,27 @@ jobs:
       - name: Validate and extract release information
         id: release
         uses: manovotny/github-releases-for-automated-package-publishing-action@v2.0.1
-      - name: Setup Node.js
+
+      - name: Setup Node.js (Release)
         uses: actions/setup-node@v6
         with:
           node-version: '24.x'
-      - name: Enable Corepack
-        run: |
-          corepack enable
-          corepack prepare yarn@4.12.0 --activate
-      - name: Enable Corepack
-        run: |
-          corepack enable
-          corepack prepare yarn@4.12.0 --activate
-      - run: yarn install --frozen-lockfile
 
-      - name: Build library
+      - name: Enable Corepack (Release)
+        run: |
+          corepack enable
+          corepack prepare yarn@4.12.0 --activate
+
+      - name: Ensure npm version (Trusted Publishing)
+        run: |
+          npm --version
+          npm i -g npm@11.5.1
+          npm --version
+
+      - name: Install dependencies (Release)
+        run: yarn install --frozen-lockfile
+
+      - name: Build library (Release)
         run: yarn build
 
       - name: Publish version (OIDC via npm)
