@@ -21,6 +21,10 @@ jobs:
           always-auth: true
           node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack prepare yarn@4.12.0 --activate
       - run: yarn install --frozen-lockfile
       - run: yarn build
 
