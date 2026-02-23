@@ -7,13 +7,13 @@
   <!-- This POM is just a local “packaging wrapper”, not the real artifact -->
   <groupId>local</groupId>
   <artifactId>zephyr-automation-fatjar</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.5</version>
   <packaging>jar</packaging>
 
   <properties>
     <zephyr.groupId>uk.gov.hmcts</zephyr.groupId>
     <zephyr.artifactId>zephyr-automation</zephyr.artifactId>
-    <zephyr.version>0.0.3</zephyr.version>
+    <zephyr.version>${version}</zephyr.version>
 
     <mainClass>uk.hmcts.zephyr.automation.ZephyrAutomation</mainClass>
 
@@ -24,6 +24,12 @@
     <repository>
       <id>hmcts-lib</id>
       <url>https://pkgs.dev.azure.com/hmcts/Artifacts/_packaging/hmcts-lib/maven/v1</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
 

@@ -60,3 +60,5 @@ known-ids.json
 
 # npm pack artifacts
 *.tgz
+
+/scripts/tools/zephyr/target/*
