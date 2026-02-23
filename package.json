@@ -17,7 +17,6 @@
     "prettier": "prettier --check \"./src/**/*.{ts,js,json}\"",
     "prettier:fix": "prettier --write \"./src/**/*.{ts,js,json}\"",
     "pack:local": "yarn build && npm pack",
-    "prepack": "yarn build",
     "audit:save": "yarn audit --recursive --environment production --json > yarn-known-issues || true",
     "audit:check": "yarn audit --recursive --environment production --json > yarn-known-issues-current || true && jq -s '[.[] | select(.type==\"auditAdvisory\") | .data.advisory.id] | sort' yarn-known-issues-current > current-ids.json && jq -s '[.[] | select(.type==\"auditAdvisory\") | .data.advisory.id] | sort' yarn-known-issues > known-ids.json && diff -q known-ids.json current-ids.json || (echo '❌ New vulnerabilities detected. Please review.' && exit 1)"
   },
