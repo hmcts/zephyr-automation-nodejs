@@ -1,7 +1,7 @@
 {
   "name": "@hmcts/zephyr-automation-nodejs",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "description": "Node.js library for Zephyr automation in HMCTS projects",
   "repository": {
@@ -11,7 +11,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": " yarn clean && tsc && cp package.json dist/",
+    "build": " yarn clean && tsc",
     "clean": "rm -rf dist",
     "lint": "eslint ./src --ext .ts && yarn prettier",
     "prettier": "prettier --check \"./src/**/*.{ts,js,json}\"",
