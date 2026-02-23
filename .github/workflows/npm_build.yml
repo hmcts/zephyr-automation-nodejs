@@ -31,6 +31,6 @@ jobs:
       - name: Build library
         run: yarn build
       - name: Publish version
-        run: yarn publish --new-version ${{ steps.release.outputs.version }} --access public
+        run: yarn npm publish --new-version ${{ steps.release.outputs.version }} --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_api_token }}
