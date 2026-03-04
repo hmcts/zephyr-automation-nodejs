@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { spawnSync} from "node:child_process";
+import {spawnSync} from "node:child_process";
 
 type TestStatus = 'passed' | 'failed' | 'pending';
 type JsonError = { message: string; stack?: string };
@@ -18,6 +18,11 @@ export type ZephyrCliOptions = {
   jiraEpicLinkCustomFieldId: string;
   jiraDefaultComponents: string;
   jarLocation: string;
+  executionEnvironment?: string;
+  executionBuild?: string;
+  executionTestCycleName?: string
+  executionAttachEvidence?: boolean;
+
 };
 
 type JsonTest = {
@@ -65,7 +70,7 @@ function readJson(filePath: string): JsonReport | null {
 
 function walk(dir: string): string[] {
   const out: string[] = [];
-  for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+  for (const ent of fs.readdirSync(dir, {withFileTypes: true})) {
     const full = path.join(dir, ent.name);
     if (ent.isDirectory()) out.push(...walk(full));
     else out.push(full);
@@ -89,7 +94,7 @@ function dedupeTests(tests: JsonTest[]): JsonTest[] {
   const seen = new Set<string>();
   const out: JsonTest[] = [];
   for (const t of tests) {
-    const key = JSON.stringify({ fullTitle: t.fullTitle, file: t.file ?? '', parents: t.parents ?? [] });
+    const key = JSON.stringify({fullTitle: t.fullTitle, file: t.file ?? '', parents: t.parents ?? []});
     if (seen.has(key)) continue;
     seen.add(key);
     out.push(t);
@@ -113,7 +118,7 @@ export function cleanZephyrReports(opts: Options) {
   }
   const root = path.resolve(baseDir);
 
-  fs.rmSync(root, { recursive: true, force: true });
+  fs.rmSync(root, {recursive: true, force: true});
 }
 
 export function mergeZephyrReports(opts: Options) {
@@ -145,7 +150,7 @@ export function mergeZephyrReports(opts: Options) {
   const reports: { file: string; report: JsonReport }[] = [];
   for (const f of inputFiles) {
     const r = readJson(f);
-    if (r) reports.push({ file: f, report: r });
+    if (r) reports.push({file: f, report: r});
   }
 
   if (reports.length === 0) {
@@ -158,7 +163,7 @@ export function mergeZephyrReports(opts: Options) {
   let endedAt: string | undefined;
 
   let tests: JsonTest[] = [];
-  for (const { report } of reports) {
+  for (const {report} of reports) {
     startedAt = isoMin(startedAt, report.meta.startedAt);
     endedAt = isoMax(endedAt, report.meta.endedAt);
     tests = tests.concat(report.tests);
@@ -174,11 +179,11 @@ export function mergeZephyrReports(opts: Options) {
       acc.durationMs += t.durationMs ?? 0;
       return acc;
     },
-    { tests: 0, passes: 0, failures: 0, pending: 0, durationMs: 0 }
+    {tests: 0, passes: 0, failures: 0, pending: 0, durationMs: 0}
   );
 
   const merged: JsonReport = {
-    meta: { reporter: 'zephyr-json', generatedAt: now, startedAt, endedAt },
+    meta: {reporter: 'zephyr-json', generatedAt: now, startedAt, endedAt},
     stats: {
       tests: stats.tests,
       passes: stats.passes,
@@ -189,7 +194,7 @@ export function mergeZephyrReports(opts: Options) {
     tests
   };
 
-  fs.mkdirSync(path.dirname(outFile), { recursive: true });
+  fs.mkdirSync(path.dirname(outFile), {recursive: true});
   fs.writeFileSync(outFile, JSON.stringify(merged, null, 2), 'utf8');
 
   console.log(
@@ -211,13 +216,18 @@ function buildArgs(opts: ZephyrCliOptions): string[] {
     "jira-auth-token": opts.jiraAuthToken,
     "jira-epic-link-custom-field-id": opts.jiraEpicLinkCustomFieldId,
     "jira-default-components": opts.jiraDefaultComponents,
+    "execution-environment": opts.executionEnvironment,
+    "execution-build": opts.executionBuild,
+    "execution-test-cycle-name": opts.executionTestCycleName,
+    "execution-attach-evidence": opts.executionAttachEvidence ? 'true' : 'false',
   };
 
   return Object.entries(entries)
     .filter(([, value]) => value !== undefined && value !== null && value !== "")
     .map(([key, value]) => `${key}=${value}`);
 }
-export function runZephyr(opts: ZephyrCliOptions):number {
+
+export function runZephyr(opts: ZephyrCliOptions): number {
   const args = buildArgs(opts);
 
   const result = spawnSync("java", ["-jar", opts.jarLocation, ...args], {

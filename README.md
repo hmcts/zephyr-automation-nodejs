@@ -75,6 +75,11 @@ To update the `zephyr-automation-independent` jar, follow these steps:
 3. Commit the updated jar file in `scripts/tools/zephyr/zephyr-automation-independent.jar` and push to the repository.
 4. Update the version of `@hmcts/zephyr-automation-nodejs` in `package.json` and publish a new version.
 
+### For local testing of changes to the jar file:
+yarn add @hmcts/zephyr-automation-nodejs@file:<Link to this direcotry>
+I.e
+yarn add @hmcts/zephyr-automation-nodejs@file:/Users/benedwards/Desktop/Projects/opal/github/zephyr-automation-nodejs
+
 
 ## License
 
