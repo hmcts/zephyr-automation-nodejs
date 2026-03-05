@@ -20,7 +20,9 @@ export type ZephyrCliOptions = {
   jarLocation: string;
   executionEnvironment?: string;
   executionBuild?: string;
-  executionTestCycleName?: string
+  executionTestCycleName?: string;
+  executionTestCycleDescription?: string;
+  executionTestCycleVersion?: string;
   executionAttachEvidence?: boolean;
 
 };
@@ -219,6 +221,8 @@ function buildArgs(opts: ZephyrCliOptions): string[] {
     "execution-environment": opts.executionEnvironment,
     "execution-build": opts.executionBuild,
     "execution-test-cycle-name": opts.executionTestCycleName,
+    "execution-test-cycle-description": opts.executionTestCycleDescription,
+    "execution-test-cycle-version": opts.executionTestCycleVersion,
     "execution-attach-evidence": opts.executionAttachEvidence ? 'true' : 'false',
   };
 
