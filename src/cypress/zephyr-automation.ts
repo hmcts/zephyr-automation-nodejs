@@ -24,6 +24,8 @@ export type ZephyrCliOptions = {
   executionTestCycleDescription?: string;
   executionTestCycleVersion?: string;
   executionAttachEvidence?: boolean;
+  successStatusId?: string;
+  failedStatusId?: string;
 
 };
 
@@ -224,6 +226,8 @@ function buildArgs(opts: ZephyrCliOptions): string[] {
     "execution-test-cycle-description": opts.executionTestCycleDescription,
     "execution-test-cycle-version": opts.executionTestCycleVersion,
     "execution-attach-evidence": opts.executionAttachEvidence ? 'true' : 'false',
+    "success-status-id": opts.successStatusId,
+    "failed-status-id": opts.failedStatusId,
   };
 
   return Object.entries(entries)
