@@ -13,9 +13,9 @@ export type ZephyrCliOptions = {
   githubRepoBaseSrcDir?: string;
   jiraBaseUrl: string;
   jiraProjectId: string;
-  jiraDefaultUser: string;
+  jiraDefaultUserId: string;
   jiraAuthToken: string;
-  jiraEpicLinkCustomFieldId: string;
+  jiraAuthUsername: string;
   jiraDefaultComponents: string;
   jarLocation: string;
   executionEnvironment?: string;
@@ -26,6 +26,9 @@ export type ZephyrCliOptions = {
   executionAttachEvidence?: boolean;
   successStatusId?: string;
   failedStatusId?: string;
+  zephyrAccessKey: string;
+  zephyrSecretKey: string;
+  zephyrAccountId: string;
 
 };
 
@@ -216,9 +219,9 @@ function buildArgs(opts: ZephyrCliOptions): string[] {
     "github-repo-base-src-dir": opts.githubRepoBaseSrcDir,
     "jira-base-url": opts.jiraBaseUrl,
     "jira-project-id": opts.jiraProjectId,
-    "jira-default-user": opts.jiraDefaultUser,
+    "jira-default-user-id": opts.jiraDefaultUserId,
+    "jira-auth-username": opts.jiraAuthUsername,
     "jira-auth-token": opts.jiraAuthToken,
-    "jira-epic-link-custom-field-id": opts.jiraEpicLinkCustomFieldId,
     "jira-default-components": opts.jiraDefaultComponents,
     "execution-environment": opts.executionEnvironment,
     "execution-build": opts.executionBuild,
@@ -228,6 +231,9 @@ function buildArgs(opts: ZephyrCliOptions): string[] {
     "execution-attach-evidence": opts.executionAttachEvidence ? 'true' : 'false',
     "success-status-id": opts.successStatusId,
     "failed-status-id": opts.failedStatusId,
+    "zephyr-access-key" : opts.zephyrAccessKey,
+    "zephyr-secret-key" : opts.zephyrSecretKey,
+    "zephyr-account-id" : opts.zephyrAccountId,
   };
 
   return Object.entries(entries)
